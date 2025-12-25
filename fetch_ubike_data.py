@@ -21,7 +21,7 @@ def fetch_data():
 def filter_stations(data):
     target_stations = []
     # Filter keywords: You can adjust these to find specific stations
-    keywords = ["板橋車站", "捷運板橋站"]
+    keywords = ["板橋車站", "捷運板橋站", "板橋福德公園", "新府區運路口"]
     
     for station in data:
         name = station.get("sna", "")
