@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>板橋車站 YouBike 2.0 即時車況歷史</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; }
+        .chart-container { position: relative; height: 60vh; width: 100%; margin-top: 30px; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.8em; color: #777; }
+        #last-updated { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>板橋車站 YouBike 2.0 剩餘車位趨勢</h1>
+    <div style="text-align: center;">
+        <span id="last-updated">載入中...</span>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="ubikeChart"></canvas>
+    </div>
+
+    <div class="footer">
+        Data source: New Taipei City Open Data | Updated every 30 mins
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                // Add timestamp to prevent caching
+                const response = await fetch('ubike_data.json?t=' + new Date().getTime());
+                if (!response.ok) throw new Error("Failed to load data");
+                const history = await response.json();
+                
+                if (history.length === 0) return;
+
+                const lastEntry = history[history.length - 1];
+                document.getElementById('last-updated').textContent = `最後更新時間: ${lastEntry.time}`;
+
+                const labels = history.map(entry => entry.time);
+                
+                // Group data by station
+                // Identify all unique stations first
+                const stationsSet = new Set();
+                history.forEach(entry => {
+                    entry.stations.forEach(s => stationsSet.add(s.station));
+                });
+                
+                const datasets = Array.from(stationsSet).map((stationName, index) => {
+                    // Generate a color
+                    const hue = (index * 137.508) % 360; // Golden angle approx
+                    const color = `hsla(${hue}, 70%, 50%, 1)`;
+
+                    return {
+                        label: stationName,
+                        data: history.map(entry => {
+                            const stationData = entry.stations.find(s => s.station === stationName);
+                            return stationData ? stationData.available : null; // Handle missing data points
+                        }),
+                        borderColor: color,
+                        backgroundColor: color,
+                        tension: 0.3,
+                        pointRadius: 2,
+                        fill: false
+                    };
+                });
+
+                renderChart(labels, datasets);
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('last-updated').innerText = "無法載入資料 (如果是第一次執行，可能是尚未產生 JSON 檔)";
+            }
+        }
+
+        function renderChart(labels, datasets) {
+            const ctx = document.getElementById('ubikeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'hour',
+                                displayFormats: {
+                                    hour: 'MM/dd HH:mm'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '時間'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '可借車輛數'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                }
+            });
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
