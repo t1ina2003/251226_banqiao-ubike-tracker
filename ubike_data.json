@@ -1,40 +1,5 @@
 [
   {
-    "time": "2026-01-23 11:36",
-    "stations": [
-      {
-        "station": "YouBike2.0_板橋福德公園",
-        "available": 0,
-        "total": 0
-      },
-      {
-        "station": "YouBike2.0_捷運板橋站(3號出口)",
-        "available": 0,
-        "total": 0
-      },
-      {
-        "station": "YouBike2.0_捷運板橋站(1號出口)",
-        "available": 0,
-        "total": 0
-      },
-      {
-        "station": "YouBike2.0_板橋車站",
-        "available": 0,
-        "total": 0
-      },
-      {
-        "station": "YouBike2.0_新府區運路口",
-        "available": 0,
-        "total": 0
-      },
-      {
-        "station": "YouBike2.0_板橋車站(新站路)",
-        "available": 0,
-        "total": 0
-      }
-    ]
-  },
-  {
     "time": "2026-01-23 12:09",
     "stations": [
       {
@@ -11830,6 +11795,41 @@
   },
   {
     "time": "2026-01-31 00:50",
+    "stations": [
+      {
+        "station": "YouBike2.0_板橋福德公園",
+        "available": 0,
+        "total": 0
+      },
+      {
+        "station": "YouBike2.0_捷運板橋站(3號出口)",
+        "available": 0,
+        "total": 0
+      },
+      {
+        "station": "YouBike2.0_捷運板橋站(1號出口)",
+        "available": 0,
+        "total": 0
+      },
+      {
+        "station": "YouBike2.0_板橋車站",
+        "available": 0,
+        "total": 0
+      },
+      {
+        "station": "YouBike2.0_新府區運路口",
+        "available": 0,
+        "total": 0
+      },
+      {
+        "station": "YouBike2.0_板橋車站(新站路)",
+        "available": 0,
+        "total": 0
+      }
+    ]
+  },
+  {
+    "time": "2026-01-31 01:35",
     "stations": [
       {
         "station": "YouBike2.0_板橋福德公園",
